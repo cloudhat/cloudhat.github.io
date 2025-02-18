@@ -248,7 +248,7 @@ public void issueCoupon(Long couponId, Long memberId) throws OutOfStockException
 
 
 
-![exhausted](/assets/img/posts/2024-03-01-distributed-lock-redis-FCFS/flow-chart-stock-exists.png)
+![exhausted](/assets/img/posts/2024/2024-03-01-distributed-lock-redis-FCFS/flow-chart-stock-exists.png)
 
 ---
 
@@ -263,7 +263,7 @@ public void issueCoupon(Long couponId, Long memberId) throws OutOfStockException
 
 
 
-![exhausted](/assets/img/posts/2024-03-01-distributed-lock-redis-FCFS/flow-chart-stock-exhausted.png)
+![exhausted](/assets/img/posts/2024/2024-03-01-distributed-lock-redis-FCFS/flow-chart-stock-exhausted.png)
 
 ---
 
@@ -343,7 +343,7 @@ public class DiscountCouponService {
 
 
 
-![failure](/assets/img/posts/2024-03-01-distributed-lock-redis-FCFS/flow-chart-rdb-failure.png)
+![failure](/assets/img/posts/2024/2024-03-01-distributed-lock-redis-FCFS/flow-chart-rdb-failure.png)
 
 ---
 

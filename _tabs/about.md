@@ -58,7 +58,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 ## 리미티드 포티
 
-(2022.05 ~ 2024.08) **(**[🔗](http://www.limited40.com/)**)**
+(2022.05 ~ 2024.08) **(**[🔗](https://www.limited40.com)**)**
 
 - 사용 기술 : Spring, MyBatis ,JSP ,MySQL ,Redis
 

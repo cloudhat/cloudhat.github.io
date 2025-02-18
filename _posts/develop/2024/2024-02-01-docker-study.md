@@ -7,7 +7,7 @@ tags: [Infra, Docker]
 
 >
 > ✅ **해당 콘텐츠는 유데미로부터 강의 쿠폰을 제공받아 작성되었습니다.**
-> 링크 :  [https://www.udemy.com/course/docker-kubernetes-2022/](https://www.udemy.com/course/docker-kubernetes-2022/)
+> - 링크 :  [https://www.udemy.com/course/docker-kubernetes-2022/](https://www.udemy.com/course/docker-kubernetes-2022/)
 >
 
 ## 들어가기 앞서

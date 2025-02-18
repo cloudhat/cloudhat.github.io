@@ -5,11 +5,11 @@ categories: [Backend, Architecture]
 tags: [Backend, Architecture, Redis, MySQL, Distributed Lock, Redisson]     # TAG names should always be lowercase
 ---
 
-<!-- 
-# 1.선착순 시스템 개발 시리즈
 
-- [1부 : Distributed Lock 과 Redis를 이용한 선착순 할인쿠폰 시스템](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/)
-- [2부 : Redis의 Pub/Sub과 Sorted Set을 이용한 비동기 선착순 시스템](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/) -->
+> **선착순 시스템 개발 시리즈**
+> 
+> - 1부 : Distributed Lock 과 Redis를 이용한 선착순 할인쿠폰 시스템
+> - [2부 : Redis의 Pub/Sub과 Sorted Set을 이용한 비동기 선착순 시스템](https://cloudhat.github.io/posts/redis-pub-sub-FCFS/)
 
 
 ## 1.개요

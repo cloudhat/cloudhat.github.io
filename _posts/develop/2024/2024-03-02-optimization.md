@@ -6,8 +6,6 @@ tags: [Backend, read-only, Cache, Index, Optimization]
 ---
 
 
-## 목차
-
 <br>
 ## 개요
 

@@ -26,15 +26,16 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Introduce.
 
-안녕하세요, 3년차 백엔드 개발자 김산입니다.
+안녕하세요. 3년차 백엔드 개발자 김산입니다.
 
-효율적으로 문제를 해결하기 위해 항상 최적의 전략을 고민하고 있습니다.
+이커머스 서비스를 개발, 운영한 경험이 있으며 지금은 실시간 사무 보조를 받을 수 있는 온라인 플랫폼인 이지태스크를 개발 및 운영하고 있습니다.
 
-단순 코딩에 그치지 않고 능동적으로 고객의 관점에서 요구사항을 구현하고 있습니다
+사용자 경험을 가장 중요한 가치로 생각하며 능동적으로 문제를 해결하며 즐겁게 일하고 있습니다.  
+더 나은 사용자 경험을 만들기 위해 동료들과 긴밀하게 논의하며 가장 적절한 전략을 도출하기 위해 노력하고 있습니다.  
+성장에 관심이 많아 꾸준히 학습하며 동료들과 적극적으로 지식을 나누고 있습니다.  
+조직의 성장에도 관심이 많아 사내에서 Project manger 역할도 겸하고 있습니다.
 
-변화에 열려있는 클린한 소프트웨어를 사랑합니다.
 
-조직의 생산성에 관심이 많아 사내에서 Project manager 역할도 겸하고 있습니다.
 
 <br>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -42,7 +43,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 ## 이지태스크 (2024.08 ~ 현재) **(**[🔗](https://easytask.co.kr/)**)**
 
- [**실시간 사무 보조를 받을 수 있는 온라인 시간제 사무 보조 플랫폼(🔗)**](https://easytask.co.kr/easytask-company)
+**실시간 사무 보조를 받을 수 있는 온라인 시간제 사무 보조 플랫폼**
 
 
 - 사용 기술 
@@ -56,9 +57,8 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
     - 팀 내에 에자일 프로세스 도입
     - 요구사항 정의 및 마일스톤 수립
 
-## 리미티드 포티
+## 리미티드 포티 (2022.05 ~ 2024.08) **(**[🔗](https://www.limited40.com)**)**
 
-(2022.05 ~ 2024.08) **(**[🔗](https://www.limited40.com)**)**
 
 - 사용 기술 : Spring, MyBatis ,JSP ,MySQL ,Redis
 
@@ -67,8 +67,8 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 (코카콜라 음료 및 굿즈를 판매하는 2만 MAU의 온라인 스토어**)**
 
 - 결제시스템부터 관리자 페이지까지 이커머스 서비스 운영 전반 참여
-- [초당 1천 이상의 Request를 수용 가능한 선착순 시스템 구현](https://www.notion.so/24-03-Distributed-Lock-Redis-ca449dbdde8a47188a7010076e872c57?pvs=21)
-- [인덱싱, 캐싱 등의 방법으로 서비스 전반 최적화](https://www.notion.so/24-03-afa8eab15367456d94fca181de17c849?pvs=21)
+- [초당 1천 이상의 Request를 수용 가능한 선착순 시스템 구현](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/)
+- [인덱싱, 캐싱 등의 방법으로 서비스 전반 최적화](https://cloudhat.github.io/posts/optimization/)
 - 테스트 코드가 전무한 상황에서 테스트 작성 및 테스트 코드 작성 문화 전파 시도
 - 객체지향 관점에서 레거시 코드 리팩토링
 
@@ -93,9 +93,8 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 # Side project.
 
-## 이커머스 주문-결제 시스템
+##  **[이커머스 주문-결제 아키텍쳐](https://cloudhat.github.io/posts/payment-system/)**
 
-([링크](https://www.notion.so/24-05-ca8474d5f918430da2c76ea3df423fc3?pvs=21))
 
 (2024.04 ~2024.05)
 
@@ -105,9 +104,8 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 - 장애상황에 안정적으로 대응 가능하도록 설계
 - 사용기술 : Spring Boot, JPA, H2 Database
 
-## 글또 10기 참여
+##  **[글또 10기 참여](https://geultto.github.io/blog/geultto-summary/)**
 
-[https://geultto.github.io/blog/geultto-summary/](https://geultto.github.io/blog/geultto-summary/)
 
 (2023.12 ~2024.05)
 
@@ -116,8 +114,6 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 - 기간 동안 총 7개의 글 작성
 
 ## 공적인 사적모임 홈페이지 제작
-
-[https://www.gongsamo.kr](https://www.gongsamo.kr/)
 
 (2023.03 ~2023.08)
 

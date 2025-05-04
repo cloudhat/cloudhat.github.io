@@ -26,14 +26,14 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Introduce.
 
-안녕하세요. 3년차 백엔드 개발자 김산입니다.
+안녕하세요. 4년차 백엔드 개발자 김산입니다.
 
-이커머스 서비스를 개발, 운영한 경험이 있으며 지금은 실시간 사무 보조를 받을 수 있는 온라인 플랫폼인 이지태스크를 개발 및 운영하고 있습니다.
+이커머스 서비스를 개발, 운영한 경험이 있으며 지금은 실시간 사무 보조 온라인 플랫폼 '이지태스크'를 개발 및 운영하고 있습니다.
 
-사용자 경험을 가장 중요한 가치로 생각하며 능동적으로 문제를 해결하며 즐겁게 일하고 있습니다.  
-더 나은 사용자 경험을 만들기 위해 동료들과 긴밀하게 논의하며 가장 적절한 전략을 도출하기 위해 노력하고 있습니다.  
-성장에 관심이 많아 꾸준히 학습하며 동료들과 적극적으로 지식을 나누고 있습니다.  
-조직의 성장에도 관심이 많아 사내에서 Project manger 역할도 겸하고 있습니다.
+- 사용자 경험을 최우선 가치로 두고 동료들과 긴밀하게 협업하고 있습니다. 
+- 기술적 완성도와 비즈니스의 trade-off를 고려하며 적절한 수준의 지속가능한 코드를 추구합니다.
+- 성장에 관심이 많아 매일 꾸준히 학습하고 있으며 지식을 나누는 것을 좋아합니다.
+- 조직의 생산성에도 관심이 많아 사내에서 Project manager 역할도 겸하고 있습니다.
 
 
 
@@ -42,52 +42,53 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 # Work Experience.
 
 ## 이지태스크 (2024.08 ~ 현재) **(**[🔗](https://easytask.co.kr/)**)**
-
 **실시간 사무 보조를 받을 수 있는 온라인 시간제 사무 보조 플랫폼**
 
+사용 기술 
+-  Spring boot, JPA, MySQL, Redis, Jenkins, ArgoCD, Kubernetes, AWS
 
-- 사용 기술 
-  -  Spring, JPA, MySQL, Redis, Jenkins, ArgoCD, Kubernetes
+프로젝트
+- Backend & Infra
+    - [레거시 시스템 리팩토링](https://cloudhat.github.io/posts/refactoring/)
+    - [쿠버네티스 배포 속도 향상](https://cloudhat.github.io/posts/kubernetes-deployment/)
+    - 다중회귀분석을 이용한 매칭 알고리즘 고도화 진행 중
+- ETC
+    - [PM 역할 담당 및 팀 내에 에자일 프로세스 도입](https://cloudhat.github.io/posts/agile-for-agile/)
+    - [개발자 채용 담당](https://cloudhat.github.io/posts/recruitment-process-improvement/)
 
-
-- Backend Developer
-    - 매칭 시스템 리팩토링
-    - 인프라 관리
-- Project Manager
-    - 팀 내에 에자일 프로세스 도입
-    - 요구사항 정의 및 마일스톤 수립
+  
+---
 
 ## 리미티드 포티 (2022.05 ~ 2024.08) **(**[🔗](https://www.limited40.com)**)**
+[코카-콜라 공식 스토어 개발 및 운영 ](https://cokeplay.cocacola.co.kr/main)
 
 
-- 사용 기술 : Spring, MyBatis ,JSP ,MySQL ,Redis
+사용 기술 
+  - Spring boot, MyBatis ,JSP ,MySQL ,Redis
 
-[**코카-콜라 공식 스토어 개발 및 운영 🔗**](https://cokeplay.cocacola.co.kr/main)
 
-(코카콜라 음료 및 굿즈를 판매하는 2만 MAU의 온라인 스토어**)**
-
-- 결제시스템부터 관리자 페이지까지 이커머스 서비스 운영 전반 참여
+프로젝트
+- 추천시스템, 결제시스템, 관리자 페이지 기능 등 이커머스 서비스 운영 전반에 대해 개발 및 레거시 리팩토링
 - [초당 1천 이상의 Request를 수용 가능한 선착순 시스템 구현](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/)
 - [인덱싱, 캐싱 등의 방법으로 서비스 전반 최적화](https://cloudhat.github.io/posts/optimization/)
-- 테스트 코드가 전무한 상황에서 테스트 작성 및 테스트 코드 작성 문화 전파 시도
-- 객체지향 관점에서 레거시 코드 리팩토링
+- [객체지향 관점에서 레거시 코드 리팩토링](https://cloudhat.github.io/posts/strategy-pattern/)
+- 테스트 코드가 전무한 상황에서 테스트 작성 및 테스트 코드 작성 문화 전파 
 
 <br>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Skill(Level).
+# Skill.
 
 ## Backend
 
 ▪️Spring Boot  ▪️Spring MVC  ▪️JPA ▪️QueryDSL 
 
-▪️JUnit ▪️MySQL  ▪️Redis  ▪️Python ▪️Docker ▪️Jenkins
+▪️JUnit ▪️MySQL  ▪️Redis  ▪️Python ▪️Docker ▪️Jenkins 
 
 ## Infra
 
-▪️Jenkins
+▪️Jenkins  ▪️ArgoCD  ▪️Kubernetes  ▪️AWS
 
-▪️AWS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

@@ -41,7 +41,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 # Work Experience.
 
 ## 이지태스크 (2024.08 ~ 현재) **(**[🔗](https://easytask.co.kr/)**)**
-**실시간 사무 보조를 받을 수 있는 온라인 시간제 사무 보조 플랫폼**
+**동료들로부터 프로덕트에 대한 열정이 진심이며 특히 비개발자에게 서버 단의 문제를 쉽고 상세하게 풀어낸다는 평가를 받았습니다.**
 
 사용 기술 
 -  Spring boot, JPA, MySQL, Redis, Jenkins, ArgoCD, Kubernetes, AWS
@@ -50,6 +50,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 - Backend & Infra
     - [레거시 시스템 리팩토링으로 SonarQube 기준 code smell 50개 이상 제거](https://cloudhat.github.io/posts/refactoring/)
     - [쿠버네티스 배포 시간 단축 (Pod 생성 속도 2배 이상 향상)](https://cloudhat.github.io/posts/kubernetes-deployment/)
+    - [ELK Stack을 이용한 로그 모니터링 시스템 구축](https://cloudhat.github.io/posts/ELK-in-local-env/)
     - 다중회귀분석을 이용한 매칭 알고리즘 고도화 진행 중
 - ETC
     - [PM 역할 담당 및 팀 내에 에자일 프로세스 도입을 통해 작업속도 3배 이상 향상](https://cloudhat.github.io/posts/agile-for-agile/)
@@ -59,7 +60,11 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 ---
 
 ## 리미티드 포티 (2022.05 ~ 2024.08) **(**[🔗](https://www.limited40.com)**)**
-[코카-콜라 공식 스토어 개발 및 운영 ](https://cokeplay.cocacola.co.kr/main)
+**선배들로부터 버그 없이 안정적으로 기능을 구현하며 연차에 비해서도 많은 지식을 학습했다는 평가를 받았습니다.**
+
+주요 프로젝트 
+- [코카-콜라 공식 스토어 개발 및 운영 ](https://cokeplay.cocacola.co.kr/main)
+
 
 
 사용 기술 

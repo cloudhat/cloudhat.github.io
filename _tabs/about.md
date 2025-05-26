@@ -51,7 +51,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
     - [레거시 시스템 리팩토링으로 SonarQube 기준 code smell 50개 이상 제거](https://cloudhat.github.io/posts/refactoring/)
     - [쿠버네티스 배포 시간 단축 (Pod 생성 속도 2배 이상 향상)](https://cloudhat.github.io/posts/kubernetes-deployment/)
     - [ELK Stack을 이용한 로그 모니터링 시스템 구축](https://cloudhat.github.io/posts/ELK-in-local-env/)
-    - [CQRS를 이용한 매칭 쿼리 최적화](https://cloudhat.github.io/posts/CQRS-concept/)
+    - [CQRS를 이용한 쿼리 최적화 관련 글 사내 공유](https://cloudhat.github.io/posts/CQRS-concept/)
     - 다중회귀분석을 이용한 매칭 알고리즘 고도화 진행 중
 - ETC
     - [PM 역할 담당 및 팀 내에 에자일 프로세스 도입을 통해 작업속도 3배 이상 향상](https://cloudhat.github.io/posts/agile-for-agile/)

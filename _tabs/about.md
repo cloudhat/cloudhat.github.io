@@ -41,7 +41,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 # Work Experience.
 
 ## 이지태스크 (2024.08 ~ 현재) **(**[🔗](https://easytask.co.kr/)**)**
-**동료들로부터 프로덕트에 대한 열정이 진심이며 특히 비개발자에게 서버 단의 문제를 쉽고 상세하게 풀어낸다는 평가를 받았습니다.**
+**동료들로부터 프로덕트에 대한 열정이 진심이며 [특히 비개발자에게 서버 단의 문제를 쉽고 상세하게 풀어낸다는 평가를 받았습니다.](https://cloudhat.github.io/posts/developer-possible-today/)**
 
 사용 기술 
 -  Spring boot, JPA, MySQL, Redis, Jenkins, ArgoCD, Kubernetes, AWS

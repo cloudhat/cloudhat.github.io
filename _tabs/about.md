@@ -26,12 +26,14 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Introduce.
 
-안녕하세요. 4년차 백엔드 개발자 김산입니다.
+안녕하세요. 문제해결이 게임처럼 즐거운 4년차 백엔드 개발자 김산입니다.
 
-이커머스 서비스를 개발, 운영한 경험이 있으며 지금은 실시간 사무 보조 온라인 플랫폼 '이지태스크'를 개발 및 운영하고 있습니다.
+이커머스 서비스 개발, 운영 경험이 있으며 지금은 프리랜서 매칭 플랫폼 ‘이지태스크’를 개발 및 운영하고 있습니다.
 
 - [기술적 복잡도와 생산성의 trade-off를 이해하고 있으며 적절한 수준의 지속가능한 코드를 추구합니다.](https://cloudhat.github.io/posts/sustainable-software/)
+    - 누구나 이해할 수 있는 명쾌한 코드를 작성하기 위해 노력하며 오버엔지니어링을 경계합니다.
 - [조직의 생산성에도 관심이 많아 사내에서 Project manager 역할도 겸하고 있습니다.](https://cloudhat.github.io/posts/agile-for-agile/)
+    - 에자일 프로세스를 도입하여 팀의 작업속도를 3배 이상 향상한 경험이 있습니다.
 - 성장에 관심이 많아 매일 꾸준히 학습하고 있으며 지식을 나누는 것을 좋아합니다.
 
 
@@ -49,12 +51,18 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 프로젝트
 - Backend & Infra
     - [레거시 시스템 리팩토링으로 SonarQube 기준 code smell 50개 이상 제거](https://cloudhat.github.io/posts/refactoring/)
+        - 비즈니스 로직을 도메인 엔티티에 이관하여 응집성 향상
+        - 중복되는 공통 로직을 파사드 패턴으로 간결하게 수정
+        - RESTful 원칙에 맞게 API 분리
     - [쿠버네티스 배포 시간 단축 (Pod 생성 속도 2배 이상 향상)](https://cloudhat.github.io/posts/kubernetes-deployment/)
+        - slow starting containers를 안전하고 빠르게 실행하기 위해 Startup probe 추가
+        - 기존의 Rolling 배포전략을 Blue/Green과 유사하게 작동하도록 변경
     - [ELK Stack을 이용한 로그 모니터링 시스템 구축](https://cloudhat.github.io/posts/ELK-in-local-env/)
     - [CQRS를 이용한 쿼리 최적화 관련 글 사내 공유](https://cloudhat.github.io/posts/CQRS-concept/)
-    - 다중회귀분석을 이용한 매칭 알고리즘 고도화 진행 중
 - ETC
     - [PM 역할 담당 및 팀 내에 에자일 프로세스 도입을 통해 작업속도 3배 이상 향상](https://cloudhat.github.io/posts/agile-for-agile/)
+        - 스프린트 및 회고를 통해 생산성 향상
+        - 칸반보드, 간트차트로 일정 시각화
     - [개발자 채용 담당, 채용 공고 개선으로 지원율 10배 이상 증가 달성](https://cloudhat.github.io/posts/recruitment-process-improvement/)
 
   
@@ -75,8 +83,11 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 프로젝트
 - 추천시스템, 결제시스템, 관리자 페이지 기능 등 이커머스 서비스 운영 전반에 대해 개발 및 레거시 리팩토링
 - [초당 1천 이상의 Request를 수용 가능한 선착순 시스템 구현](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/)
+    - Redisson을 이용한 Distributed Lock을 AOP로 간결하게 구현
 - [인덱싱, 캐싱 등의 방법으로 초당 1만 이상의 Request를 안정적으로 처리](https://cloudhat.github.io/posts/optimization/)
+    - CQRS을 고려하여 부하가 많이 걸리는 Query 모델을 분리 및 비동기 처리
 - [객체지향 관점에서 레거시 코드 리팩토링](https://cloudhat.github.io/posts/strategy-pattern/)
+    - 템플릿 메소드 패턴과 전략패턴으로 OCP 및 DIP 원칙에 부합하는 코드 작성    
 - 테스트 코드가 전무한 상황에서 테스트 작성 및 테스트 코드 작성 문화 전파 
 
 <br>

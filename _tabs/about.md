@@ -50,6 +50,9 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 프로젝트
 - Backend & Infra
+    - [Kafka & Debezium을 이용한 CDC 구현](https://cloudhat.github.io/posts/debezium-kafka-CDC/)
+        - 엔티티 변경 로직과 로그 수집 로직을 분리할 수 있게 되었습니다.
+        - 로그 수집을 비동기로 처리하여 높은 가용성을 얻게 되었습니다.
     - [레거시 시스템 리팩토링으로 SonarQube 기준 code smell 50개 이상 제거](https://cloudhat.github.io/posts/refactoring/)
         - 비즈니스 로직을 도메인 엔티티에 이관하여 응집성 향상
         - 중복되는 공통 로직을 파사드 패턴으로 간결하게 수정

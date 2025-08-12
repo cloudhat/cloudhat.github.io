@@ -28,8 +28,8 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 안녕하세요. 문제해결이 게임처럼 즐거운 4년차 백엔드 개발자 김산입니다.
 
-이커머스 서비스 개발, 운영 경험이 있으며 지금은 프리랜서 매칭 플랫폼 ‘이지태스크’를 개발 및 운영하고 있습니다.
-
+- 항상 깊이 있게 고민하고 최선의 선택을 하기 위해 노력합니다.
+    - 제 고민과 성과를 기술블로그에 정리하고 있습니다. 
 - [기술적 복잡도와 생산성의 trade-off를 이해하고 있으며 적절한 수준의 지속가능한 코드를 추구합니다.](https://cloudhat.github.io/posts/sustainable-software/)
     - 누구나 이해할 수 있는 명쾌한 코드를 작성하기 위해 노력하며 오버엔지니어링을 경계합니다.
 - [조직의 생산성에도 관심이 많아 사내에서 Project manager 역할도 겸하고 있습니다.](https://cloudhat.github.io/posts/agile-for-agile/)
@@ -51,8 +51,9 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 프로젝트
 - Backend & Infra
     - [Kafka & Debezium을 이용한 CDC 구현](https://cloudhat.github.io/posts/debezium-kafka-CDC/)
-        - 엔티티 변경 로직과 로그 수집 로직을 분리할 수 있게 되었습니다.
-        - 로그 수집을 비동기로 처리하여 높은 가용성을 얻게 되었습니다.
+        - 엔티티 변경 로직과 로그 수집 로직을 분리, 로그 수집을 비동기로 처리하여 높은 가용성 보장
+        - Retry & DLQ로 안정적인 예외처리 구현
+        - Binlog의 file, position 으로 멱등성 보완, Timestamp로 순서보장 보완
     - [레거시 시스템 리팩토링으로 SonarQube 기준 code smell 50개 이상 제거](https://cloudhat.github.io/posts/refactoring/)
         - 비즈니스 로직을 도메인 엔티티에 이관하여 응집성 향상
         - 중복되는 공통 로직을 파사드 패턴으로 간결하게 수정
@@ -60,6 +61,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
     - [쿠버네티스 배포 시간 단축 (Pod 생성 속도 2배 이상 향상)](https://cloudhat.github.io/posts/kubernetes-deployment/)
         - slow starting containers를 안전하고 빠르게 실행하기 위해 Startup probe 추가
         - 기존의 Rolling 배포전략을 Blue/Green과 유사하게 작동하도록 변경
+        - 명시적으로 warming up을 안정적으로 수행
     - [ELK Stack을 이용한 로그 모니터링 시스템 구축](https://cloudhat.github.io/posts/ELK-in-local-env/)
     - [CQRS를 이용한 쿼리 최적화 관련 글 사내 공유](https://cloudhat.github.io/posts/CQRS-concept/)
 - ETC
@@ -76,7 +78,9 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 주요 프로젝트 
 - [코카-콜라 공식 스토어 개발 및 운영 ](https://cokeplay.cocacola.co.kr/main)
-
+    - 추천시스템, 주문, 배송 시스템 개발 및 유지보수
+    - 선착순 이벤트 기획 및 개발
+    - 백오피스 기획, 개발, 유지보수
 
 
 사용 기술 
@@ -86,7 +90,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 프로젝트
 - 추천시스템, 결제시스템, 관리자 페이지 기능 등 이커머스 서비스 운영 전반에 대해 개발 및 레거시 리팩토링
 - [초당 1천 이상의 Request를 수용 가능한 선착순 시스템 구현](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/)
-    - Redisson을 이용한 Distributed Lock을 AOP로 간결하게 구현
+    - Redis Redisson을 이용한 Distributed Lock을 AOP로 간결하게 구현
 - [인덱싱, 캐싱 등의 방법으로 초당 1만 이상의 Request를 안정적으로 처리](https://cloudhat.github.io/posts/optimization/)
     - CQRS을 고려하여 부하가 많이 걸리는 Query 모델을 분리 및 비동기 처리
 - [객체지향 관점에서 레거시 코드 리팩토링](https://cloudhat.github.io/posts/strategy-pattern/)
@@ -100,9 +104,9 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 ## Backend
 
-▪️Spring Boot  ▪️Spring MVC  ▪️JPA ▪️QueryDSL 
+▪️Spring Boot  ▪️Spring MVC  ▪️JPA ▪️QueryDSL ▪️JUnit
 
-▪️JUnit ▪️MySQL  ▪️Redis  ▪️Python ▪️Docker ▪️Jenkins 
+▪️MySQL  ▪️Redis  ▪️Kafka  ▪️Docker ▪️Python 
 
 ## Infra
 
@@ -131,7 +135,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 
 - 개발자 글쓰기 모임 ‘글또’ 참여
 - 글또 내에서 책 ‘클린코드’ 독서 모임 주최
-- 기간 동안 총 7개의 글 작성
+- 기간 동안 총 7개의 글 작성 및 꾸준히 글을 작성하는 습관 획득
 
 ## 공적인 사적모임 홈페이지 제작
 

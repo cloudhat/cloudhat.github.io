@@ -176,6 +176,43 @@ public List<Long> getConsumerLagList(String groupId) throws ExecutionException, 
     }
 ```
 
+### Binlog의 file, position 을 uniqe value로 사용하여 멱등성 보완
+
+- **문제**
+    - 공식문서에 따르면 debezium은 정상 상황에서 exactly-once를 보장하나 장애 시에는 at-least-once를 보장합니다. 때문에 장애 시 엔티티 변경 이력이 **중복 저장**될 수 있습니다.
+
+- **해결**
+    - 이를 보완하기 위해 로그 테이블에 binlog의 file, position도 같이 저장하여 중복 데이터를 구분할 수 있도록 하였습니다.
+        - MySQL의 특성 상 binlog 동일 file 기준으로 position는 unique합니다.
+        - 따라서 만약 중복이 발생했을 경우 file  및 position을 기준으로 중복 데이터를 추출 및 삭제할 수 있습니다.
+        - 데이터 예시
+
+            | PK | 유니크 값({file}:{position}) | type | 엔티티 필드1 | 엔티티 필드2 |
+            | --- | --- | --- | --- | --- |
+            | 1 | mysql-bin-changelog.231401:10042 | UPDATE | BLAH BLAH | BLAH BLAH |
+            | 2 | mysql-bin-changelog.362209:20087 | INSERT | BLAH BLAH | BLAH BLAH |
+
+- **UNIQUE 제약조건을 사용하여 멱등성을 보장하지 않은 이유**
+    - MySQL의 UNIQUE 제약조건을 부여할 경우 로그을 저장하는 시점에 중복 여부를 검증할 수 있습니다.
+        - 하지만 UNIQUE 제약조건은 별도로 INDEX를 생성하는 것이므로 관리하는데 비용이 발생합니다.
+    - 따라서 중복이 발생하더라도 file, position을 이용하여 후처리하는 것이 바람직하다고 판단하여 퍼포먼스 및 비용절감을 위해 UNIQUE 제약조건을 사용하지 않았습니다.
+
+
+### 타임스탬프를 이용한 순서보장 보완
+
+- 문제
+    - 공식문서에 따르면 Debezium은 순서를 보장합니다.
+    - 다만 카프카의 특성 상 동일 토픽 기준으로 여러 파티션을 사용할 경우 순서가 보장되지 않습니다.
+- 해결
+    - 별도의 로직으로 직접 순서보장을 하기 보다는 필요할 경우 순서 기준으로 정렬이 가능하도록 변경 시점의 timestamp를 저장하도록 구현했습니다.
+    - 데이터 예시
+        
+        
+        | PK | 유니크 값({file}:{position}) | type | timestamp | 엔티티 필드1 |
+        | --- | --- | --- | --- | --- |
+        | 1 | mysql-bin-changelog.231401:10042 | UPDATE | 1754889144364 | BLAH BLAH |
+        | 2 | mysql-bin-changelog.362209:20087 | INSERT | 1754889371681 | BLAH BLAH |
+
 <br>
 ## 향후 계획
 
@@ -188,3 +225,10 @@ Kafka & Debezium으로 CDC를 구현한 덕분에 안정적으로 엔티티 변�
 - 모니터링
     - 이번 개발에서는 빠른 구현을 위해 Spring Scheduler로 모니터링을 구현했습니다.
     - 추후 좀 더 정석적인 방법으로 Kafka Exporter + Prometheus + Grafana 혹은 Burrow 를 적용하고자 합니다.
+
+
+<br>
+## 참고자료
+- Debezium 공식문서 : [장애 여부에 따른 Debezium의 exactly-once 및 at-least-once](https://debezium.io/documentation/reference/3.2/connectors/mysql.html#mysql-when-things-go-wrong)
+- Debezium 공식문서 : [Debezium의 순서보장 여부](https://debezium.io/documentation/faq/#how_are_events_for_a_database_organized)
+

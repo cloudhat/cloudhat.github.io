@@ -91,6 +91,8 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 - 추천시스템, 결제시스템, 관리자 페이지 기능 등 이커머스 서비스 운영 전반에 대해 개발 및 레거시 리팩토링
 - [초당 1천 이상의 Request를 수용 가능한 선착순 시스템 구현](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/)
     - Redis Redisson을 이용한 Distributed Lock을 AOP로 간결하게 구현
+    - Redis를 사용하여 SPOF였던 RDB의 부담을 경감
+    - In-memory DB인 Redis의 특성을 이용하여 비즈니스 로직 속도 향상
 - [인덱싱, 캐싱 등의 방법으로 초당 1만 이상의 Request를 안정적으로 처리](https://cloudhat.github.io/posts/optimization/)
     - CQRS을 고려하여 부하가 많이 걸리는 Query 모델을 분리 및 비동기 처리
 - [객체지향 관점에서 레거시 코드 리팩토링](https://cloudhat.github.io/posts/strategy-pattern/)

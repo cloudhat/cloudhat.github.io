@@ -9,7 +9,7 @@ tags: [Backend, Design pattern]     # TAG names should always be lowercase
 ## 1.개요
 
 - 반복되는 패턴의 이벤트 구현에 템플릿 메소드 패턴을 적용하여 코드의 통일성을 향상시킨다
-- Spring 프레임워크의 빈의 특성과 팩토리 패턴을 결합하여  객체 간 결합도를 낮춘다
+- Spring 프레임워크의 빈의 특성과 전략 패턴을 결합하여  객체 간 결합도를 낮춘다
 
 <br>
 ## 2.배경
@@ -113,7 +113,7 @@ tags: [Backend, Design pattern]     # TAG names should always be lowercase
 
 ## 4.리팩토링 결과
 
-위 두 문제를 해결하기 위해 저는 ‘템플릿 메소드 패턴’ 과 ‘팩토리 패턴’을 이용하여 리팩토링을 진행하였습니다.
+위 두 문제를 해결하기 위해 저는 ‘템플릿 메소드 패턴’ 과 ‘전략 패턴’을 이용하여 리팩토링을 진행하였습니다.
 
 ### 1)템플릿 메소드 패턴 적용
 
@@ -180,13 +180,13 @@ tags: [Backend, Design pattern]     # TAG names should always be lowercase
 > ```
 
 
-### 2)팩토리 패턴으로 구상클래스 주입
+### 2)전략 패턴으로 구상클래스 주입
 
 **Factory 클래스**
 
 - **Spring framework의 문법 상 특정 클래스의 리스트의 주입을 선언하면 특정 클래스 혹은 인터페이스를 상속받는 모든 Bean을 주입받을 수 있습니다**
 - 이전 추상클래스에서 강제했던 isTarget 메소드를 이용하여 eventCode에 해당하는 구상클래스를 반환합니다.
-- for문 덕분에 템플릿 메소드 패턴이 적용된 구상클래스들의 구성이 바뀌어도 팩토리 클래스는 변경이 필요 없습니다
+- for문 덕분에 템플릿 메소드 패턴이 적용된 구상클래스들의 구성이 바뀌어도 전략 클래스는 변경이 필요 없습니다
 
 **Controller 클래스**
 
@@ -196,7 +196,7 @@ tags: [Backend, Design pattern]     # TAG names should always be lowercase
 ---
 ✅ Factory 패턴으로 구상클래스 주입
 
-> 1) 구상 클래스를 리턴하는 팩토리 클래스
+> 1) 구상 클래스를 리턴하는 전략 클래스
 >
 > ```java
 > @Component

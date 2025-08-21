@@ -118,7 +118,7 @@ cf)이번 토이프로젝트를 포함하여 일반적인 PG사를 통한 결제
 
 - 동시성 문제를 고려하여 결제초기화 시점에 상품의 재고를 차감하도록 구현했습니다
     - 결제승인이 완료된 후 상품의 재고를 차감할 경우  재고가 마이너스가 될 수 있기 때문입니다
-- 경합이 자주 발생하지 않는다고 가정하고 재고차감은 Optimistic Lock으로 구현했습니다.
+- ~~경합이 자주 발생하지 않는다고 가정하고 재고차감은 Optimistic Lock으로 구현했습니다.~~ [ *추가내용(25-08) : 추후 Pessimistic Lock으로 변경할 예정입니다.]
     - 그러나 Optimistic Lock은 경합이 많이 발생할 수록 리소스가 낭비됩니다. 대안으로 Pessimistic Lock, Distributed Lock([링크](https://www.notion.so/24-03-Distributed-Lock-Redis-ca449dbdde8a47188a7010076e872c57?pvs=21)) 혹은 PUB/SUB 구조로 비동기로 처리하는 방법이 있습니다.
 
 **b.전략패턴으로 결제초기화객체에게 결제 초기화 책임 위임**

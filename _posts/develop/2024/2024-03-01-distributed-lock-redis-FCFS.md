@@ -53,7 +53,7 @@ tags: [Backend, Architecture, Redis, MySQL, Distributed Lock, Redisson]     # TA
 
 - 다른 트랜잭션의 Lock을 고려하지 않고 구현할 경우 deadlock이 발생할 수 있습니다.
 - commit이 완료되어 lock이 풀리기 전까지 다른 Transction이 대기해야 합니다.
-    - 특히 Mysql에서 ‘SELECT … FOR UPDATE’로 구현한 경우 pessimistic lock에 필요하지 않은 다른 ROW도 LOCK이 걸릴 수 있습니다 ([참고](https://stackoverflow.com/questions/6066205/when-using-mysqls-for-update-locking-what-is-exactly-locked))
+    - ~~특히 Mysql에서 ‘SELECT … FOR UPDATE’로 구현한 경우 pessimistic lock에 필요하지 않은 다른 ROW도 LOCK이 걸릴 수 있습니다~~ ([참고](https://stackoverflow.com/questions/6066205/when-using-mysqls-for-update-locking-what-is-exactly-locked))  [*추가내용(25-08) : 구체적으로는 Next-Key Lock이 걸린다. 따라서 적절히 인덱스를 설계하고 사용할 경우 필요한 ROW에만 LOCK을 걸 수 있다.]
         - MySQL의 구조 상 인덱스가 없을 경우 테이블 전체에 lock을 걸고 인덱스가 있을 경우 인덱스에 lock을 걸기 때문입니다.
     - 또한 MySQL의 기본 격리수준인 REPEATABLE READ은 MVCC로 인해 트랜잭션이 길어질 경우 언두 영역에 데이터가 쌓여 데이터베이스에 부담이 될 수 있습니다
 

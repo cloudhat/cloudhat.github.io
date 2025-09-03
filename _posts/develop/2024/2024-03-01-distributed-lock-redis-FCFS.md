@@ -171,8 +171,14 @@ public @interface DistributeLock {
 
 **(2)AOP 구현**
 
+*{25.09} @Order 어노테이션으로 반드시 순서를 명시해줘야 합니다. 
+- 명시하지 않을 경우 기본값인 'Ordered.LOWEST_PRECEDENCE'이 설정되며 @Transactional 보다 후순위가 되는 문제가 발생합니다. 
+    - 왜냐하면 @Transactional은 가장 낮은 순위인 'Ordered.LOWEST_PRECEDENCE'이 기본값이지만 @Order 값이 동일한 경우 빈 등록 순서에 따라 AOP 적용 순서도 결정되기 때문입니다. 
+    - 이 경우 불필요하게 커넥션 풀을 미리 사용하게 되며 커밋보다 lock release가 더 빨라 정합성도 깨질 수 있습니다.
+
 ```java
 @Aspect
+@Order(1)
 @Component
 @RequiredArgsConstructor
 @Slf4j

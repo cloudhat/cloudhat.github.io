@@ -4,6 +4,15 @@ date: 2024-05-01 12:00:00 +0800
 categories: [Backend, Architecture]
 tags: [Backend, Architecture ,Design pattern, OOP, Test code]     
 ---
+
+## 0. 리팩토링 및 기능 추가 예고
+### 해당 프로젝트를 완성한 후 개발자로써 많이 성장했습니다. 그러다보니 당시 이 프로젝트를 진행할 때는 미처 파악하지 못했던 부족한 점이 많이 보입니다. 추후 시간이 날 때 아래의 기능 추가를 진행할 예정입니다.
+- 도메인 서비스와 어플리케이션 서비스를 분리할 예정입니다. 특히 주문 & 결제 파트 기준으로 도메인 로직을 분리하고자 합니다.
+- 기존의 E2E 테스트를 도메인 서비스를 기준으로 unit 테스트로 옮길 예정입니다.
+- 결제 로직의 결과적 정합성이 보장되도록 보상 트랜잭션과 DLQ를 적용할 예정입니다.
+- 모든 자바 코드를 코틀린으로 교체할 예정입니다.
+- 배송 및 CQRS을 이용한 상품검색 시스템을 추가할 예정입니다.
+
 ## 1. 깃헙 링크
 
 [https://github.com/cloudhat/paymentSystem](https://github.com/cloudhat/paymentSystem)

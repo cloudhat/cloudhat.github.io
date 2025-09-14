@@ -130,7 +130,7 @@ Github : [https://github.com/cloudhat](https://github.com/cloudhat)
 - 장애상황에 안정적으로 대응 가능하도록 설계
 - 사용기술 : Spring Boot, JPA, H2 Database
 
-##  **[글또 10기 참여](https://geultto.github.io/blog/geultto-summary/)**
+##  **[글또 9기 참여](https://geultto.github.io/blog/geultto-summary/)**
 
 
 (2023.12 ~2024.05)

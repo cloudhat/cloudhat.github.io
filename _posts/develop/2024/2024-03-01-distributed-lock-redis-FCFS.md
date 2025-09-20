@@ -6,11 +6,6 @@ tags: [Backend, Architecture, Redis, MySQL, Distributed Lock, Redisson]     # TA
 ---
 
 
-> **선착순 시스템 개발 시리즈**
-> 
-> - 1부 : Distributed Lock 과 Redis를 이용한 선착순 할인쿠폰 시스템
-> - [2부 : Redis의 Pub/Sub과 Sorted Set을 이용한 비동기 선착순 시스템](https://cloudhat.github.io/posts/redis-pub-sub-FCFS/)
-
 
 ## 1.개요
 
@@ -22,13 +17,12 @@ tags: [Backend, Architecture, Redis, MySQL, Distributed Lock, Redisson]     # TA
 ## 2.배경
 
 - 회사에서 약 8개월에 걸쳐 여러 선착순 쿠폰 이벤트를 개발해왔습니다.
-- 기존에는 선착순 쿠폰 발급 로직의 동시성 문제를 Redis의 List 자료구조를 Queue로 사용하여 해결해왔습니다 
-- 그러나 Redis Queue 방식은 아래의 2가지 문제점을 가지고 있습니다
-    - 이벤트 시작 전에 각 날짜의 재고에 해당하는 Queue를 미리 생성해야 함
-      - 이벤트 기간이 길거나 재고가 많을 경우 Queue를 생성하는데 시간이 소요됨
-      - 트랜잭션을 보장하기 힘들어 재고의 정합성이 깨지거나 
-      - 휴먼에러가 발생할 가능성이 있음
-- 위 문제를 해결하고자 Redisson을 이용한 Distributed Lock을 도입했습니다
+- 다소 부끄러운 이야기지만 당시 신입이었던 저는 이벤트 첫 개발 당시 동시성 문제를 알지 못한 채 선착순 로직을 구현했습니다.
+    - 그로 인해 이벤트를 처음으로 오픈했을 때 초과발급이 발생하는 심각한 문제가 발생했습니다.
+    - 이와는 별개로 당시 MySQL을 싱글 인스턴스로 운영하고 있어 DB가 이벤트 트래픽을 감당하지 못해 서버가 마비되는 문제가 발생했습니다.
+- 위 문제를 해결하고자 Redis, Redisson을 이용한 Distributed Lock을 도입했습니다
+- 여담으로 외래키로 인한 데드락도 발생했습니다. 
+    - 결과적으로 RDB로 재고를 관리하지 않아 문제는 해결됬습니다. 다만 참고차 글의 최하단에 이유와 해결책을 서술했습니다.
 
 <br>
 ## 3.Redisson을 이용한 Distributed Lock
@@ -65,11 +59,10 @@ tags: [Backend, Architecture, Redis, MySQL, Distributed Lock, Redisson]     # TA
 
 - 위 문제점 때문에 MySQL 레벨의 Lock 대신 **Redisson**을 이용하여 Distributed Lock을 구현하는 방식을 선택했습니다.
 
-**Redisson을 이용하여 Distributed Lock을 구현한 이유**
-
-- Redisson은 In-memory DB인 redis를 사용하므로 RDB을 이용한 구현에 비해 데이터에 빠른 접근 가능
+**Redis, Redisson을 이용하여 Distributed Lock을 구현한 이유**
+- Redis를 이용하여 RDB에 가해지는 부하를 분산
+- Redisson은 In-memory DB인 redis를 사용하므로 RDB을 이용한 구현에 비해 Lock을 빠르게 처리 가능
 - Redisson의 Lock은 부분적으로 pub/sub을 사용하므로 redis I/O에 대한 부하를 줄일 수 있음
-- RDB을 이용한 구현과 달리 Lock을 persistent layer와 분리할 수 있음
 
 
 
@@ -227,7 +220,7 @@ public void issueCoupon(Long couponId, Long memberId) throws OutOfStockException
     }
 }
 ```
-
+<br>
 ## 4.Redis 재고 변화 선반영 선착순 쿠폰 시스템 구현
 
 ### 1)개요
@@ -360,6 +353,7 @@ public class DiscountCouponService {
 - 혹은 Kafka를 활용하여 RDB INSERT을 안정적으로 진행하는 방법도 있습니다.
     - 여기어때 예시 ([링크](https://techblog.gccompany.co.kr/redis-kafka%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EA%B0%9C%EB%B0%9C%EA%B8%B0-feat-%EB%84%A4%EA%B3%A0%EC%99%95-ec6682e39731))
 
+<br>
 ## 5.마치며
 
 - 불과 1년 전만 해도 저는 ‘동시성 문제’라는 키워드 조차 모르는 부족한 개발자였습니다.
@@ -370,7 +364,68 @@ public class DiscountCouponService {
     - 트래픽으로 인한 장애 대응
 - 계속 바뀌는 요구사항, 널뛰는 트래픽에 대응하기 위해 어떻게 견고한 소프트웨어를 구현할지 매일 고민하고 있습니다. 그러나 이런 고민을 해결하는 과정이 전혀 괴롭지 않고 오히려 즐겁습니다.  즐거움을 원동력 삼아 앞으로도 열심히 정진하고자 합니다.
 
-## 6.참고한 자료
+<br>
+## 6.외래키로 인한 데드락 발생과 해결 방법 
+
+### 문제 상황 및 원인
+- 아래 방식으로 구현했습니다.
+    - '쿠폰 재고' 테이블을 부모 테이블로, '쿠폰 발급' 테이블을 자식 테이블로 두었습니다.
+    - (1)재고를 조회하고  (2)재고가 있을 경우 '쿠폰 발급' 테이블에 INSERT 후 (3)'쿠폰 재고' 테이블을 UPDATE 하도록 구현했습니다.
+- 위 순서로 구현할 경우 아래의 문제로 데드락이 발생합니다.
+    - '쿠폰 발급' 테이블에 INSERT하는 시점에 '쿠폰 재고' 테이블에 S-LOCK이 걸립니다.
+    - '쿠폰 재고' 테이블을 UPDATE하는 시점에 '쿠폰 재고' 테이블에 X-LOCK이 걸립니다.
+    - 만약 2개 이상의 트랜잭션이 동시에 INSERT를 하여 '쿠폰 재고' 테이블에 S-LOCK을 획득한 경우 X-LOCK을 걸기 위해 서로 상대의 S-LOCK이 해제되기를 기다립니다. 이로 인해 데드락이 발생합니다.
+
+테이블 예시
+```sql
+create table COUPON
+(
+    id    bigint auto_increment primary key,
+    name  varchar(50) not null comment '쿠폰명',
+    stock int         not null comment '재고'
+)COMMENT='쿠폰 재고';
+create table COUPON_USER
+(
+    id        bigint auto_increment primary key,
+    coupon_id int not null comment '쿠폰id',
+    user_id   int not null comment '회원id',
+    FOREIGN KEY (coupon_id) REFERENCES COUPON (id)
+)COMMENT='쿠폰 발급';
+```
+트랜잭션 예시 
+```sql
+START TRANSACTION ;
+
+# (1) 재고 조회 (이후 application에서 발급 가능한지 검증)
+SELECT * FROM COUPON;
+
+# (2) COUPON_USER INSERT
+INSERT INTO COUPON_USER (coupon_id, user_id) VALUES (1, 1001);
+
+# (3) COUPON UPDATE
+UPDATE COUPON SET stock = stock + 1 ;
+
+COMMIT ;
+```
+### 해결 방법
+- 순서를 바꾸어 UPDATE를 먼저 실행하고 INSERT를 하면 됩니다. 이 경우 X-LOCK이 먼저 걸리므로 데드락이 발생하지 않습니다. 단 동시성 문제는 이와 별개입니다.
+
+```sql
+START TRANSACTION ;
+
+# (1)재고 조회 (이후 application에서 발급 가능한지 검증)
+SELECT * FROM COUPON;
+
+# (2) COUPON UPDATE
+UPDATE COUPON SET stock = stock + 1 ;
+
+# (3) COUPON_USER INSERT
+INSERT INTO COUPON_USER (coupon_id, user_id) VALUES (1, 1001);
+
+COMMIT ;
+```
+<br>
+## 7.참고한 자료
 
 - [Redisson Github](https://github.com/redisson/redisson/wiki/8.-Distributed-locks-and-synchronizers) 
 

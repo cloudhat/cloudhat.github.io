@@ -1,14 +1,10 @@
 ---
-title: Redis의 Pub/Sub과 Sorted Set을 이용한 비동기 선착순 시스템
+title: (POC)Redis의 Pub/Sub과 Sorted Set을 이용한 비동기 선착순 시스템
 date: 2024-05-02 12:00:00 +0800
 categories: [Backend, Architecture]
 tags: [Backend, Architecture, Redis, Pub/Sub, Sorted Set, Lua Script, Async]    
 ---
 
-> **선착순 시스템 개발 시리즈**
-> 
-> - [1부 : Distributed Lock 과 Redis를 이용한 선착순 할인쿠폰 시스템](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/)
-> - 2부 : Redis의 Pub/Sub과 Sorted Set을 이용한 비동기 선착순 시스템
 
 ---
 
@@ -24,10 +20,10 @@ tags: [Backend, Architecture, Redis, Pub/Sub, Sorted Set, Lua Script, Async]
 <br>
 ## 2.배경
 
-- 이전에 소개한 Distributed Lock과 Redis를 이용한 선착순 쿠폰 시스템도 문제 없이 작동했습니다 ([🔗](https://www.notion.so/24-03-Distributed-Lock-Redis-ca449dbdde8a47188a7010076e872c57?pvs=21))
+- 이전에 소개한 Distributed Lock과 Redis를 이용한 선착순 쿠폰 시스템도 문제 없이 작동했습니다 ([🔗](https://cloudhat.github.io/posts/distributed-lock-redis-FCFS/))
 - 그러나 위 구현은 일정 이상의 트래픽이 몰릴 경우 응모 Request가 Lock 획득에 실패하여 실패처리 되는 문제가 발생할 수 있습니다.
     - 응모 실패 시 사용자는 다시 응모시도를 해야 하므로 이는 나쁜 고객경험으로 이어집니다.
-- 위 문제 발생을 예방하기 위해 선제적으로 응모와 발급이 비동기로 분리된 선착순 시스템을 구현했습니다
+- 위 문제 발생을 예방하기 위해 선제적으로 응모와 발급이 비동기로 분리된 선착순 시스템을 POC 형태로 제시했습니다
     
   
 ---

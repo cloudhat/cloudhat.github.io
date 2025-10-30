@@ -6,6 +6,13 @@ tags: [Architecture, Payment, Eventual Consistency, Idempotency]
 ---
 
 <br>
+
+## 리워드 포인트 시스템 시리즈
+- 1부 : 최종적 일관성과 유저경험을 고려한 주문&결제 아키텍쳐
+- 2부 : [**요람에서 무덤까지, 고객 경험 중심의 포인트 시스템 기획**](https://cloudhat.github.io/posts/point-system-service-design/)
+
+<br>
+
 ## 개요
 
 - 외부의 기프티콘 발급 서버와 통신하여 기프티콘을 주문-결제하는 서비스의 아키텍쳐를 설명합니다

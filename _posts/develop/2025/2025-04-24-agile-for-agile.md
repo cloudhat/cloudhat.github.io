@@ -1,7 +1,7 @@
 ---
 title: 에자일을 에자일하게 도입하다
 date: 2025-04-23 20:00:00 +0800
-categories: [Retrospective, Agile]
+categories: [PM, Agile]
 tags: [Retrospective, Agile, Project Management]    
 ---
 

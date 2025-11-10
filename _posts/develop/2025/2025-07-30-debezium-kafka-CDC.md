@@ -1,5 +1,5 @@
 ---
-title: Kafka & Debezium을 이용한 CDC 구현
+title: EntityListeners를 이용한 엔티티 변경 로그 수집
 date: 2025-07-29 17:00:00 +0800
 categories: [Backend, CDC]
 tags: [Kafka, Debezium, CDC]    
@@ -13,49 +13,54 @@ tags: [Kafka, Debezium, CDC]
 
 - 저희 서비스는 데이터 수집을 위해 특정 엔티티의 변경 이력을 로그 테이블에 저장하고 있습니다.
     - 기존에는 ‘로그 수집 로직’을 모든 ‘엔티티 변경 로직’에 붙이는 방식으로 처리하고 있었습니다.
-- 그러나 이 방식은 엔티티 변경 로직이 변경 혹은 추가될 경우 로그 수집 로직을 명시적으로 작성하지 않으면 로그가 누락될 수 있는 문제가 있었습니다. 또한 로그 수집을 동기적으로 처리하므로 성능 이슈도 발생했습니다.
+- 그러나 이 방식은 엔티티 변경 로직이 변경 혹은 추가될 경우 로그 수집 로직을 명시적으로 작성하지 않으면 로그가 누락될 수 있는 문제가 있었습니다. 
 
 **해결**
-
-- EKS 클러스터에 Kafka와 Debezium으로 CDC를 구축하여 엔티티 변경 사항을 수집하고,
-- Spring 서버에 Kafka Consumer를 구현하여 수집된 변경 내역을 로그 테이블에 자동으로 저장하도록 개선했습니다.
+- 1차 개선
+    - EKS 클러스터에 Kafka와 Debezium으로 CDC를 구축하여 엔티티 변경 사항을 수집하고,
+    - Spring 서버에 Kafka Consumer를 구현하여 수집된 변경 내역을 로그 테이블에 자동으로 저장하도록 개선했습니다.
+- 2차 개선(25.11)
+    - Bulk update를 각 Jpa 엔티티 단위로 수행하도록 로직을 분리 후
+    - @EntityListeners을 사용하여 자동으로 관리되도록 변경했습니다.
+    - 그 후 스트랭글러 패턴으로 점진적으로 CDC 구현을 제거했습니다.
 
 **결과**
-
 - 엔티티 변경 로직과 로그 수집 로직을 분리할 수 있게 되었습니다.
-- 로그 수집을 비동기로 처리하여 높은 가용성을 얻게 되었습니다.
 
 <br>
 ## 배경
 
-저희 회사는 프리랜서 매칭 플랫폼을 운영하고 있습니다. 비즈니스의 특성상 업무 관련 수락, 거절, 업무 조건 수정 등 엔티티 변경이 빈번하게 발생합니다. 이러한 변경은 사용자 경험을 개선하기 위한 중요한 데이터이므로 변경 시마다 명시적으로 변경 내역을 RDB의 로그테이블에 동기 방식으로 저장하고 있었습니다. 그러나 위와 같은 방식은 아래 2가지의 문제점을 가지고 있습니다.
+저희 회사는 프리랜서 매칭 플랫폼을 운영하고 있습니다. 비즈니스의 특성상 업무 관련 수락, 거절, 업무 조건 수정 등 엔티티 변경이 빈번하게 발생합니다. 이러한 변경은 사용자 경험을 개선하기 위한 중요한 데이터이므로 변경 시마다 명시적으로 변경 내역을 RDB의 로그테이블에 동기 방식으로 저장하고 있었습니다. 그러나 위와 같은 방식은 아래의 문제점을 가지고 있습니다.
+- 모든 엔티티 변경 로직 (CQRS 기준으로 Command에 해당)에 로그 수집 로직을 붙여야 하므로 누락될 가능성이 있습니다. 
+    - *이미 누락된 case가 발견된 상황이었습니다.
 
-- 모든 엔티티 변경 로직 (CQRS 기준으로 Command에 해당)에 로그 수집 로직을 붙여야 하므로 누락될 가능성이 있습니다
-- 로그 수집 로직을 동기 처리하므로 추후 성능 문제가 발생할 수 있습니다.
+**<u>비즈니스 개선을 위해 짧은 개발 시간 내에 누락 없이 완벽하게 모든 로그를 수집해야 하는 상황이었습니다.</u>**
 
-위 문제를 해결하기 위해 Kafka & Debezium을 이용하여 CDC를 구현하기로 결정했습니다.
+2번에 걸친 개선 과정을 통해 모든 로그를 수집할 수 있게 되었습니다.
 
 <br>
-## Kafka & Debezium, CDC 선택 이유
+## 1차 개선 : Kafka & Debezium, CDC 
+
+### Kafka & Debezium, CDC를 선택한 이유
 
 Kafka & Debezium을 포함하여 아래의 방안을 고려했습니다. 각 방안의 장단점, 결론은 아래와 같습니다.
 
 (참고사항 :  현재 운영 기준으로 EKS 클러스터에서 복수의 Spring Server를 운영하고 있습니다.)
 
-### 이벤트 기반 아키텍쳐로 리팩토링 (기각)
-- 가장 정석적인 방법이지만 촉박한 개발 일정 내에 적용이 불가능한 상황이므로 기각했습니다.
+**1)이벤트 기반 아키텍쳐로 리팩토링 (기각)**
+- 가장 이상적인 방법일 수 있지만 촉박한 개발 일정 내에 적용이 불가능한 상황이므로 기각했습니다.
 
-### Envers (기각)
+**Envers (기각)**
 
 - 장점
     - JPA와 손쉽게 통합 가능하다
 - 단점
     - Querydsl, JPQL의 bulk update/delete 쿼리는 추적 불가능하다
-    - 동기 방식으로 작동하므로 대량 데이터 처리 시 부하가 발생한다
+    - 동기 방식으로 작동하므로 대량 데이터 처리 시 부하가 발생할 수 있다.
 - 결론
     - bulk update/delete 쿼리를 추적할 수 없는 것과 성능 이슈가 치명적인 단점이라 판단하여 채택하지 않았습니다.
 
-### Debezium Engine을 이용한 CDC 구축 (기각)
+**Debezium Engine을 이용한 CDC 구축 (기각)**
 
 - 장점
     - Kafka 없이 CDC 구현 가능하므로 인프라를 간소화 할 수 있다
@@ -67,7 +72,7 @@ Kafka & Debezium을 포함하여 아래의 방안을 고려했습니다. 각 방
         - 기존 Spring 서버와 별개의 git repository를 구축해야 하므로 개발팀 구성원이 변경되는 등의 이유로 Debezium Engine 서버가 잊혀질(?) 경우 버그가 발생할 가능성이 높으며
         - 추후 트래픽이 증가했을 때 Debezium Engine은 고가용성을 보장하기 어려움
 
-### Kafka & Debezium을 이용한 CDC 구축 (선택)
+**Kafka & Debezium을 이용한 CDC 구축 (선택)**
 
 - 장점
     - 풍부한 레퍼런스
@@ -86,7 +91,6 @@ Kafka & Debezium을 포함하여 아래의 방안을 고려했습니다. 각 방
 위의 이유로 Kafka & Debezium을 이용하여 CDC를 적용하기로 결론지었습니다.
 
 <br>
-## 구현 상세
 
 ### Kafka 세팅
 
@@ -140,6 +144,47 @@ Kafka & Debezium을 포함하여 아래의 방안을 고려했습니다. 각 방
     }
 ```
 
+
+### Binlog의 file, position 을 uniqe value로 사용하여 멱등성 보완
+
+- **문제**
+    - 공식문서에 따르면 debezium은 정상 상황에서 exactly-once를 보장하나 장애 시에는 at-least-once를 보장합니다. 때문에 장애 시 엔티티 변경 이력이 **중복 저장**될 수 있습니다.
+
+- **해결**
+    - 이를 보완하기 위해 로그 테이블에 binlog의 file, position도 같이 저장하여 중복 데이터를 구분할 수 있도록 하였습니다.
+        - MySQL의 특성 상 binlog 동일 file 기준으로 position는 unique합니다.
+        - 따라서 만약 중복이 발생했을 경우 file  및 position을 기준으로 중복 데이터를 추출 및 삭제할 수 있습니다.
+        - 데이터 예시
+
+            | PK  | 유니크 값({file}:{position})     | type   | 엔티티 필드1 | 엔티티 필드2 |
+            | --- | -------------------------------- | ------ | ------------ | ------------ |
+            | 1   | mysql-bin-changelog.231401:10042 | UPDATE | BLAH BLAH    | BLAH BLAH    |
+            | 2   | mysql-bin-changelog.362209:20087 | INSERT | BLAH BLAH    | BLAH BLAH    |
+
+- **UNIQUE 제약조건을 사용하여 멱등성을 보장하지 않은 이유**
+    - MySQL의 UNIQUE 제약조건을 부여할 경우 로그을 저장하는 시점에 중복 여부를 검증할 수 있습니다.
+        - 하지만 UNIQUE 제약조건은 별도로 INDEX를 생성하는 것이므로 관리하는데 비용이 발생합니다.
+    - 따라서 중복이 발생하더라도 file, position을 이용하여 후처리하는 것이 바람직하다고 판단하여 퍼포먼스 및 비용절감을 위해 UNIQUE 제약조건을 사용하지 않았습니다.
+
+
+### 타임스탬프를 이용한 순서보장 보완
+
+- 문제
+    - 공식문서에 따르면 Debezium은 순서를 보장합니다.
+    - 다만 카프카의 특성 상 동일 토픽 기준으로 여러 파티션을 사용할 경우 순서가 보장되지 않습니다.
+- 해결
+    - 별도의 로직으로 직접 순서보장을 하기 보다는 필요할 경우 순서 기준으로 정렬이 가능하도록 변경 시점의 timestamp를 저장하도록 구현했습니다.
+    - 데이터 예시
+        
+        
+        | PK  | 유니크 값({file}:{position})     | type   | timestamp     | 엔티티 필드1 |
+        | --- | -------------------------------- | ------ | ------------- | ------------ |
+        | 1   | mysql-bin-changelog.231401:10042 | UPDATE | 1754889144364 | BLAH BLAH    |
+        | 2   | mysql-bin-changelog.362209:20087 | INSERT | 1754889371681 | BLAH BLAH    |
+
+<br>
+
+
 ### 모니터링
 
 Spring Scheduler를 이용하여 주기적으로 Consumer Lag를 모니터링 하고 특정 수치 이상일 경우 슬랙으로 알림을 받아볼 수 있도록 구현했습니다.
@@ -177,56 +222,92 @@ public List<Long> getConsumerLagList(String groupId) throws ExecutionException, 
     }
 ```
 
-### Binlog의 file, position 을 uniqe value로 사용하여 멱등성 보완
+<br>
 
-- **문제**
-    - 공식문서에 따르면 debezium은 정상 상황에서 exactly-once를 보장하나 장애 시에는 at-least-once를 보장합니다. 때문에 장애 시 엔티티 변경 이력이 **중복 저장**될 수 있습니다.
+## 2차 개선 : @EntityListeners 적용
 
-- **해결**
-    - 이를 보완하기 위해 로그 테이블에 binlog의 file, position도 같이 저장하여 중복 데이터를 구분할 수 있도록 하였습니다.
-        - MySQL의 특성 상 binlog 동일 file 기준으로 position는 unique합니다.
-        - 따라서 만약 중복이 발생했을 경우 file  및 position을 기준으로 중복 데이터를 추출 및 삭제할 수 있습니다.
-        - 데이터 예시
-
-            | PK | 유니크 값({file}:{position}) | type | 엔티티 필드1 | 엔티티 필드2 |
-            | --- | --- | --- | --- | --- |
-            | 1 | mysql-bin-changelog.231401:10042 | UPDATE | BLAH BLAH | BLAH BLAH |
-            | 2 | mysql-bin-changelog.362209:20087 | INSERT | BLAH BLAH | BLAH BLAH |
-
-- **UNIQUE 제약조건을 사용하여 멱등성을 보장하지 않은 이유**
-    - MySQL의 UNIQUE 제약조건을 부여할 경우 로그을 저장하는 시점에 중복 여부를 검증할 수 있습니다.
-        - 하지만 UNIQUE 제약조건은 별도로 INDEX를 생성하는 것이므로 관리하는데 비용이 발생합니다.
-    - 따라서 중복이 발생하더라도 file, position을 이용하여 후처리하는 것이 바람직하다고 판단하여 퍼포먼스 및 비용절감을 위해 UNIQUE 제약조건을 사용하지 않았습니다.
+Kafka & Debezium을 이용하여 급한 불은 껐습니다. 그러나 해당 구현 방식은 서비스의 규모 대비 오버엔지니어링이라고 판단되어 계속 고민했습니다. 그 결과 @EntityListeners 를 이용하여 엔티티 변경 로직과 로그 수집 로직을 분리하기로 결정했습니다. 
 
 
-### 타임스탬프를 이용한 순서보장 보완
+### @EntityListeners를 선택한 이유
 
-- 문제
-    - 공식문서에 따르면 Debezium은 순서를 보장합니다.
-    - 다만 카프카의 특성 상 동일 토픽 기준으로 여러 파티션을 사용할 경우 순서가 보장되지 않습니다.
-- 해결
-    - 별도의 로직으로 직접 순서보장을 하기 보다는 필요할 경우 순서 기준으로 정렬이 가능하도록 변경 시점의 timestamp를 저장하도록 구현했습니다.
-    - 데이터 예시
-        
-        
-        | PK | 유니크 값({file}:{position}) | type | timestamp | 엔티티 필드1 |
-        | --- | --- | --- | --- | --- |
-        | 1 | mysql-bin-changelog.231401:10042 | UPDATE | 1754889144364 | BLAH BLAH |
-        | 2 | mysql-bin-changelog.362209:20087 | INSERT | 1754889371681 | BLAH BLAH |
+아래의 근거를 이유로 Envers 대신 @EntityListeners를 선택했습니다.
+
+**Envers**
+
+- 장점 : 별도 코드 없이 @Audited만 선언하면 변경 이력 자동 기록이 가능
+- 단점 : _AUD 테이블 구조가 고정돼 있고, 커스터마이징이 어렵다
+
+**@EntityListeners**
+
+자유롭게 커스텀이 가능하며 필요할 경우 Kafka 등의 메시지 큐와 결합하여 확장 용이
+
+### 구현 상세
+
+**1)기존 bulk query를 JPA 엔티티 마다 실행되도록 로직 분리**
+
+현재 서비스의 상황 상 TPS가 크지 않으므로 동기 방식으로 구현해도 성능 이슈가 없다고 판단했습니다.
+따라서 JPA 변경감지를 활용하기 위해 기존 bulk update query를 개별 JPA 엔티티 마다 변경감지를 이용하는 방식으로 레거시 로직을 분리하는 절차를 진행했습니다.
+
+**2)@EntityListeners를 이용하여 로그 수집 로직을 단일 클래스에서 관리하도록 구현**
+아래 예시처럼  응집성을 위해 단일 클래스에서 모든 로그 수집을 담당하고 엔티티에는 어노테이션만 작성하면 되도록 구현했습니다.
+
+
+
+```java
+@Component
+public class TicketEntityListener {
+
+    private final TicketLogRepository logRepository;
+
+    @Autowired
+    public void init(TicketLogRepository repository) {
+        logRepository = repository;
+    }
+
+    @PostPersist
+    public void afterCreate(Ticket ticket) {
+        saveLog(ticket, "CREATE");
+    }
+
+    @PostUpdate
+    public void afterUpdate(Ticket ticket) {
+        saveLog(ticket, "UPDATE");
+    }
+
+    @PostRemove
+    public void afterDelete(Ticket ticket) {
+        saveLog(ticket, "DELETE");
+    }
+
+    private void saveLog(Ticket ticket, String action) {
+        TicketLog log = TicketLog.fromEntity(ticket, action);
+        logRepository.save(log);
+    }
+}
+```
+
+```java
+
+@EntityListeners(TicketEntityListener.class)
+public class Ticket {
+    .
+    .
+    .
+```
+
+**3)스트랭글러 패턴으로 점진적으로 CDC 구현 제거**
+
+아래 방식으로 스트랭글러 패턴을 사용하여 기존 CDC를 대체했습니다.
+- 기존 CDC(Debezium) 파이프라인은 유지.
+- 신규 EntityListener 기반 로그 수집을 일부 엔티티에 적용.
+- 점진적으로 모든 CDC 파이프라인을 제거하면서 EntityListener로 전환.
 
 <br>
-## 향후 계획
 
-Kafka & Debezium으로 CDC를 구현한 덕분에 안정적으로 엔티티 변경 이력을 수집할 수 있게 되었습니다.
-
-추후 상황에 따라 아래의 고도화 작업을 거칠 예정입니다.
-
-- CDC 활용
-    - 캐시 갱신, 추천 시스템 등을 비동기로 처리하기 위해 CDC 활용
-- 모니터링
-    - 이번 개발에서는 빠른 구현을 위해 Spring Scheduler로 모니터링을 구현했습니다.
-    - 추후 좀 더 정석적인 방법으로 Kafka Exporter + Prometheus + Grafana 혹은 Burrow 를 적용하고자 합니다.
-
+## 결과
+- 엔티티 변경 로직과 로그 수집 로직을 분리할 수 있게 되었습니다.
+- 확장성을 가지면서도 JPA 엔티티를 중심으로 비즈니스 로직이 응집되는 효과를 얻었습니다.
 
 <br>
 ## 참고자료
